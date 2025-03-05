@@ -8,6 +8,8 @@ import exco7 from "../../../assets/exco/exco7.jpg";
 import exco8 from "../../../assets/exco/exco8.jpg";
 import exco9 from "../../../assets/exco/exco9.jpg";
 import exco10 from "../../../assets/exco/exco10.jpg";
+import exco11 from "../../../assets/exco/exco11.jpg";
+import exco12 from "../../../assets/exco/exco12.jpg";
 import Title from "../../custom/Topography";
 
 const excoMembers = [
@@ -90,6 +92,22 @@ const excoMembers = [
     position: "Director of Sports",
     state: "Kogi",
     lga: "Okehi",
+  },
+  {
+    image: exco11,
+    name: "Tajudeen Jubril Olanrewaju",
+    department: "Banking and Finance",
+    position: "National Association of Finance Students (NAFS)",
+    state: "Oyo",
+    lga: "Egbeda",
+  },
+  {
+    image: exco12,
+    name: "Adewole Daniel Oluwatofunmi",
+    // department: "Banking and Finance",
+    position: "(NUMBAS) President",
+    state: "Ekiti",
+    lga: "Ikole",
   },
 ];
 
