@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <main className="mx-auto mt-[12%]">
+      <main className="mx-auto mt-[9.5%]">
         <LandingSection />
         <AboutSection />
         <VisionAndMission />

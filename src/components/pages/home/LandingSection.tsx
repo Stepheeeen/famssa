@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 const LandingSection = () => {
   return (
     <section
-      className={`${styles.bgHero} relative h-[500px] w-full bg-cover`}
+      className={`${styles.bgHero} relative h-[520px] w-full bg-cover`}
       id="home"
     >
       {/* Overlay for readability */}
