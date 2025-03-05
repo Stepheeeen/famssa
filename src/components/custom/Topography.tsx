@@ -4,7 +4,7 @@ import { COLORS } from "../../constants";
 const Title = ({ children, custom }: { children: ReactNode; custom?: any }) => {
   return (
     <h1
-      className={`py-3 lg:text-6xl text-center ${custom}`}
+      className={`py-3 text-5xl lg:text-6xl text-center ${custom}`}
       style={{ color: COLORS.Yellow }}
     >
       {children}
