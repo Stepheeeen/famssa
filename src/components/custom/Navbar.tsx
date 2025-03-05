@@ -9,8 +9,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+
   const links = [
-    { page: "Home", path: "/" },
+    { page: "Home", path: "#home" },
     { page: "About", path: "#about" },
     { page: "Vision & Mission", path: "#vision-&-mission" },
     { page: "News Forum", path: "#news-forum" },
@@ -22,14 +23,9 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Scroll effect to change navbar color
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > window.innerHeight * 0.8) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > window.innerHeight * 0.1);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -39,31 +35,31 @@ const Navbar = () => {
   return (
     <nav
       className={`w-full fixed top-0 z-10 transition-all duration-300 ${
-        isScrolled ? "bg-white" : "bg-[#151414] text-white"
+        isScrolled ? "bg-white shadow-lg" : "bg-[#151414] text-white"
       }`}
     >
-      <div className="px-10 mx-auto flex justify-between items-center py-3">
+      <div className="px-6 md:px-10 flex justify-between items-center py-3">
         {/* Logo */}
         <Link to="/">
-          <img src={logo} alt="logo" className="md:w-32 md:h-32 w-16 h-16" />
+          <img src={logo} alt="logo" className="md:w-24 md:h-24 w-16 h-16" />
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-5">
+        <div className="hidden md:flex space-x-6">
           {links.map((item, index) => (
-            <Link
+            <a
               key={index}
-              to={item.path}
-              className={`${
-                location.pathname === item.path
+              href={item.path}
+              className={`text-lg hover:underline transition ${
+                location.pathname === item.path || location.hash === item.path
                   ? "text-[#FE9A2B]"
                   : isScrolled
                   ? "text-[#0B1D45]"
                   : "text-white"
-              } text-lg hover:underline`}
+              }`}
             >
               {item.page}
-            </Link>
+            </a>
           ))}
         </div>
 
@@ -79,20 +75,20 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg p-4">
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg p-4 absolute w-full left-0">
           {links.map((item, index) => (
-            <Link
+            <a
               key={index}
-              to={item.path}
-              className={`block py-2 transition ${
-                location.pathname === item.path
+              href={item.path}
+              className={`block py-2 transition text-lg ${
+                location.pathname === item.path || location.hash === item.path
                   ? "text-[#FE9A2B]"
                   : "text-gray-800"
               }`}
               onClick={() => setIsOpen(false)}
             >
               {item.page}
-            </Link>
+            </a>
           ))}
         </div>
       )}
