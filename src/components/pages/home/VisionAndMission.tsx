@@ -1,5 +1,3 @@
-import React from "react";
-import Title from "../../custom/Topography";
 import { COLORS } from "../../../constants";
 
 const VisionAndMission = () => {

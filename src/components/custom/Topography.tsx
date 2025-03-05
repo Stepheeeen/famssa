@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { COLORS } from "../../constants";
 
 const Title = ({ children, custom }: { children: ReactNode; custom?: any }) => {

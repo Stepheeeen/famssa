@@ -1,4 +1,3 @@
-import React from "react";
 import Title from "../../custom/Topography";
 import facultyImg from "../../../assets/logo.jpg";
 
