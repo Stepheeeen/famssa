@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/button";
-import { useLocation } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
+  const [activeSection, setActiveSection] = useState(""); // Track active section
+
+  const sectionsRef = useRef<any>({});
 
   const links = [
     { page: "Home", path: "#home" },
@@ -26,10 +27,30 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > window.innerHeight * 0.1);
+
+      let currentSection = "";
+      Object.keys(sectionsRef.current).forEach((key) => {
+        const section = sectionsRef.current[key];
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.3 && rect.bottom >= 200) {
+            currentSection = key;
+          }
+        }
+      });
+
+      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    links.forEach((link) => {
+      const id = link.path.replace("#", "");
+      sectionsRef.current[id] = document.getElementById(id);
+    });
   }, []);
 
   return (
@@ -51,7 +72,7 @@ const Navbar = () => {
               key={index}
               href={item.path}
               className={`text-lg hover:underline transition ${
-                location.pathname === item.path || location.hash === item.path
+                activeSection === item.path.replace("#", "")
                   ? "text-[#FE9A2B]"
                   : isScrolled
                   ? "text-[#0B1D45]"
@@ -81,7 +102,7 @@ const Navbar = () => {
               key={index}
               href={item.path}
               className={`block py-2 transition text-lg ${
-                location.pathname === item.path || location.hash === item.path
+                activeSection === item.path.replace("#", "")
                   ? "text-[#FE9A2B]"
                   : "text-gray-800"
               }`}
