@@ -9,6 +9,16 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const links = [
+    { page: "Home", path: "/" },
+    { page: "About", path: "#about" },
+    { page: "Vision & Mission", path: "#vision-&-mission" },
+    { page: "News Forum", path: "#news-forum" },
+    { page: "Excos", path: "#excos" },
+    { page: "Newsletter", path: "#newsletter" },
+    { page: "CBE", path: "/cbe" },
+    { page: "Admin", path: "/admin" },
+  ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -35,21 +45,12 @@ const Navbar = () => {
       <div className="px-10 mx-auto flex justify-between items-center py-3">
         {/* Logo */}
         <Link to="/">
-          <img src={logo} alt="logo" className="w-32 h-32" />
+          <img src={logo} alt="logo" className="md:w-32 md:h-32 w-16 h-16" />
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-5">
-          {[
-            { page: "Home", path: "/" },
-            { page: "About", path: "#about" },
-            { page: "Vision & Mission", path: "#vision-&-mission" },
-            { page: "News Forum", path: "/news-forum" },
-            { page: "Excos", path: "#excos" },
-            { page: "Newsletter", path: "#newsletter" },
-            { page: "CBE", path: "/cbe" },
-            { page: "Admin", path: "/admin" },
-          ].map((item, index) => (
+          {links.map((item, index) => (
             <Link
               key={index}
               to={item.path}
@@ -59,7 +60,7 @@ const Navbar = () => {
                   : isScrolled
                   ? "text-[#0B1D45]"
                   : "text-white"
-              } text-md hover:underline`}
+              } text-lg hover:underline`}
             >
               {item.page}
             </Link>
@@ -67,31 +68,30 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <Button variant="ghost" className="md:hidden" onClick={toggleMenu}>
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <Button
+          variant="ghost"
+          className="md:hidden w-8 h-8"
+          onClick={toggleMenu}
+        >
+          {isOpen ? <X size={30} /> : <Menu size={30} />}
         </Button>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg p-4">
-          {[
-            "Home",
-            "About",
-            "Vision & Mission",
-            "News Forum",
-            "Excos",
-            "Newsletter",
-            "CBE",
-            "Admin",
-          ].map((item, index) => (
+          {links.map((item, index) => (
             <Link
               key={index}
-              to={`/${item.toLowerCase().replace(/ & | /g, "-")}`}
-              className="block py-2 text-gray-800 hover:text-blue-600 transition"
+              to={item.path}
+              className={`block py-2 transition ${
+                location.pathname === item.path
+                  ? "text-[#FE9A2B]"
+                  : "text-gray-800"
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              {item}
+              {item.page}
             </Link>
           ))}
         </div>

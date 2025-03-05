@@ -22,7 +22,7 @@ const excoImages = [
 
 const ExcoGallery = () => {
   return (
-    <section className="py-10 px-6 mt-10 bg-gray-100" id="#exco">
+    <section className="py-10 px-6 mt-10 bg-gray-100" id="excos">
       <div className="max-w-4xl mx-auto text-center">
         <Title custom={"font-semibold"}>Excos</Title>
         <p className="text-gray-600 mt-1">Meet our esteemed executives.</p>

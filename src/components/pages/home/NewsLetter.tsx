@@ -2,7 +2,10 @@ import { Button } from "../../ui/button";
 
 const Newsletter = () => {
   return (
-    <section className="bg-[#151414] text-white py-20 px-6 mt-20">
+    <section
+      className="bg-[#151414] text-white py-20 px-6 mt-20"
+      id="newsletter"
+    >
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl font-bold">Subscribe to Our Newsletter</h2>
         <p className="text-gray-400 mt-2">

@@ -28,7 +28,7 @@ const newsData = [
 
 const NewsForum = () => {
   return (
-    <section className="py-10 px-6 mt-10" id="#news-forum">
+    <section className="py-10 px-6 mt-10" id="news-forum">
       <div className="max-w-4xl mx-auto text-center">
         <Title custom={"font-semibold"}>News Forum</Title>
         <p className="text-gray-600 mt-1">

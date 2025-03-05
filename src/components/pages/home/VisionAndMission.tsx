@@ -5,8 +5,8 @@ import { COLORS } from "../../../constants";
 const VisionAndMission = () => {
   return (
     <section
-      id="#about"
-      className="mt-10 w-full grid place-items-center bg-gray-100 py-10 pb-20"
+      id="vision-&-mission"
+      className="mt-10 w-full grid place-items-center bg-gray-100 py-10 px-4"
     >
       {[
         {
@@ -26,16 +26,18 @@ const VisionAndMission = () => {
       ].map((item, index) => (
         <div
           key={index}
-          className="container flex flex-col justify-center items-center"
+          className="container max-w-3xl flex flex-col justify-center items-center py-5"
         >
           <h1
-            className={`py-3 text-5xl font-semibold text-center `}
+            className="py-3 text-3xl md:text-5xl font-bold text-center"
             style={{ color: COLORS.Yellow }}
           >
             {item.text}
           </h1>
 
-          <p className="text-xl text-center">{item.content}</p>
+          <p className="text-lg md:text-xl text-center leading-relaxed">
+            {item.content}
+          </p>
         </div>
       ))}
     </section>
