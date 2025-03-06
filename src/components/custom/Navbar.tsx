@@ -3,21 +3,23 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/button";
 import logo from "../../assets/logo.jpg";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState(""); // Track active section
-
-  const sectionsRef = useRef<any>({});
+  const [activeSection, setActiveSection] = useState("");
+  const location = useLocation();
+  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const links = [
-    { page: "Home", path: "#home" },
-    { page: "About", path: "#about" },
-    { page: "Vision & Mission", path: "#vision-&-mission" },
-    { page: "News Forum", path: "#news-forum" },
-    { page: "Excos", path: "#excos" },
-    { page: "Newsletter", path: "#newsletter" },
+    { page: "Home", path: "/#home" },
+    { page: "About", path: "/#about" },
+    { page: "Vision & Mission", path: "/#vision-&-mission" },
+    { page: "News Forum", path: "/#news-forum" },
+    { page: "Excos", path: "/#excos" },
+    { page: "Newsletter", path: "/#newsletter" },
+    { page: "Library", path: "/library" },
     { page: "CBE", path: "/cbe" },
     { page: "Admin", path: "/admin" },
   ];
@@ -27,19 +29,6 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > window.innerHeight * 0.1);
-
-      let currentSection = "";
-      Object.keys(sectionsRef.current).forEach((key) => {
-        const section = sectionsRef.current[key];
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.3 && rect.bottom >= 200) {
-            currentSection = key;
-          }
-        }
-      });
-
-      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -47,10 +36,42 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    // Populate refs for sections
     links.forEach((link) => {
-      const id = link.path.replace("#", "");
-      sectionsRef.current[id] = document.getElementById(id);
+      if (link.path.startsWith("/#")) {
+        const id = link.path.substring(2); // Remove "/#"
+        sectionsRef.current[id] = document.getElementById(id);
+      }
     });
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.3, // Section should be at least 30% visible
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions
+    );
+
+    Object.values(sectionsRef.current).forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => {
+      Object.values(sectionsRef.current).forEach((section) => {
+        if (section) observer.unobserve(section);
+      });
+    };
   }, []);
 
   return (
@@ -67,21 +88,26 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          {links.map((item, index) => (
-            <a
-              key={index}
-              href={item.path}
-              className={`text-lg hover:underline transition ${
-                activeSection === item.path.replace("#", "")
-                  ? "text-[#FE9A2B]"
-                  : isScrolled
-                  ? "text-[#0B1D45]"
-                  : "text-white"
-              }`}
-            >
-              {item.page}
-            </a>
-          ))}
+          {links.map((item, index) => {
+            const isActive =
+              activeSection === item.path.substring(2) ||
+              location.pathname === item.path;
+            return (
+              <a
+                key={index}
+                href={item.path}
+                className={`text-lg hover:underline transition ${
+                  isActive
+                    ? "text-[#FE9A2B]"
+                    : isScrolled
+                    ? "text-[#0B1D45]"
+                    : "text-white"
+                }`}
+              >
+                {item.page}
+              </a>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Button */}
@@ -102,7 +128,7 @@ const Navbar = () => {
               key={index}
               href={item.path}
               className={`block py-2 transition text-lg ${
-                activeSection === item.path.replace("#", "")
+                activeSection === item.path.substring(2)
                   ? "text-[#FE9A2B]"
                   : "text-gray-800"
               }`}
