@@ -4,8 +4,8 @@ import { ChevronLeft, ChevronRight, Clock, Flag } from "lucide-react";
 const CBEInterface = () => {
   // State for exam data
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [flaggedQuestions, setFlaggedQuestions] = useState<number[]>([]);
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [examScore, setExamScore] = useState(0);
@@ -65,7 +65,7 @@ const CBEInterface = () => {
   };
 
   // Toggle flagged status
-  const toggleFlagged = (questionId: never) => {
+  const toggleFlagged = (questionId: number) => {
     if (flaggedQuestions.includes(questionId)) {
       setFlaggedQuestions(flaggedQuestions.filter((id) => id !== questionId));
     } else {
@@ -96,7 +96,7 @@ const CBEInterface = () => {
         } questions. Submit exam?`
       )
     ) {
-      const { correctCount, scorePercentage } = calculateScore();
+      const { scorePercentage } = calculateScore();
       setExamScore(scorePercentage);
       setExamSubmitted(true);
     }
