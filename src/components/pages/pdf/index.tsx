@@ -77,7 +77,7 @@ const PDFLibrary = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPdf, setSelectedPdf] = useState<any | null>(null);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [showReadModal, setShowReadModal] = useState(false);
+  //   const [showReadModal, setShowReadModal] = useState(false);
 
   const filteredPdfs = useMemo(
     () =>
@@ -145,7 +145,8 @@ const PDFLibrary = () => {
               <p className="text-sm text-gray-500">Size: {pdf.size}</p>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => setShowReadModal(true)}>
+              <Button variant="outline">
+                {/* onClick={() => setShowReadModal(true)} */}
                 <BookOpen size={16} /> Read
               </Button>
               <Button onClick={() => handleDownload(pdf)}>
@@ -162,7 +163,7 @@ const PDFLibrary = () => {
       </div>
 
       <Dialog open={showPremiumModal} onOpenChange={setShowPremiumModal}>
-        <DialogContent className="bg-white rounded-lg shadow-lg p-6">
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Purchase PDF</DialogTitle>
           </DialogHeader>
