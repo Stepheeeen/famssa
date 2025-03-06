@@ -162,7 +162,7 @@ const PDFLibrary = () => {
       </div>
 
       <Dialog open={showPremiumModal} onOpenChange={setShowPremiumModal}>
-        <DialogContent>
+        <DialogContent className="bg-white rounded-lg shadow-lg p-6">
           <DialogHeader>
             <DialogTitle>Purchase PDF</DialogTitle>
           </DialogHeader>
