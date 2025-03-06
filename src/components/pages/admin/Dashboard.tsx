@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  ChevronLeft,
   Upload,
   FileQuestion,
   CreditCard,
@@ -8,15 +7,18 @@ import {
   Menu,
   X,
   Settings,
+  Power,
 } from "lucide-react";
 import EditHomepage from "./pages/EditHomepage";
 import TransactionPage from "./pages/TransactionPage";
 import UploadPDF from "./pages/UploadPDF";
 import UploadCBE from "./pages/UploadCBE";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("upload-pdfs");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
 
   // Toggle sidebar on mobile
   const toggleSidebar = () => {
@@ -85,6 +87,17 @@ const AdminDashboard = () => {
               >
                 <Home className="h-5 w-5" />
                 <span>Edit Homepage</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  navigate("/admin");
+                }}
+                className={`w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all cursor-pointer`}
+              >
+                <Power className="h-5 w-5 text-red-400" />
+                <span className="text-red-400">Logout</span>
               </button>
             </li>
           </ul>
