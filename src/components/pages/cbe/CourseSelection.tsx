@@ -11,6 +11,7 @@ import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
 import { Clock, BookOpen, AlertCircle } from "lucide-react";
 import Navbar from "../../custom/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const courses = [
   {
@@ -69,6 +70,7 @@ const CourseSelection = () => {
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
+  const navigate = useNavigate();
 
   // Filter courses based on search term and difficulty
   const filteredCourses = courses.filter((course) => {
@@ -243,7 +245,9 @@ const CourseSelection = () => {
               Cancel
             </Button>
             <Button
-              onClick={() => alert(`Starting ${selectedCourse?.name} Exam!`)}
+              onClick={() => {
+                navigate("/cbe/examination");
+              }}
             >
               Start Exam
             </Button>

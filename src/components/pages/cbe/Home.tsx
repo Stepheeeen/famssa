@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Clock, Flag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CBEInterface = () => {
   // State for exam data
@@ -9,6 +10,7 @@ const CBEInterface = () => {
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [examScore, setExamScore] = useState(0);
+  const navigate = useNavigate();
 
   // Sample exam data
   const examData = {
@@ -174,7 +176,9 @@ const CBEInterface = () => {
                   Retake Exam
                 </button>
                 <button
-                  onClick={() => (window.location.href = "/exams")}
+                  onClick={() => {
+                    navigate("/cbe");
+                  }}
                   className="bg-gray-600 text-white py-2 px-6 rounded hover:bg-gray-700"
                 >
                   Take Another Exam
