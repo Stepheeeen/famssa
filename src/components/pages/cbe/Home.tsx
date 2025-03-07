@@ -12,7 +12,7 @@ const CBEInterface = () => {
 
   // Sample exam data
   const examData = {
-    title: "Medical Licensing Examination",
+    title: "CBE Examination",
     totalQuestions: 20,
     questions: Array.from({ length: 20 }, (_, i) => ({
       id: i + 1,

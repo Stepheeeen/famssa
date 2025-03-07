@@ -1,7 +1,7 @@
-import CBEExamInterface from "../../components/pages/cbe/Home";
+import CourseSelection from "../../components/pages/cbe/CourseSelection";
 
 const index = () => {
-  return <CBEExamInterface />;
+  return <CourseSelection />;
 };
 
 export default index;
