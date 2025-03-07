@@ -93,9 +93,9 @@ const Navbar = () => {
               activeSection === item.path.substring(2) ||
               location.pathname === item.path;
             return (
-              <a
+              <Link
                 key={index}
-                href={item.path}
+                to={item.path}
                 className={`text-lg hover:underline transition ${
                   isActive
                     ? "text-[#FE9A2B]"
@@ -105,7 +105,7 @@ const Navbar = () => {
                 }`}
               >
                 {item.page}
-              </a>
+              </Link>
             );
           })}
         </div>
