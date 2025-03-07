@@ -7,7 +7,7 @@ const CBEInterface = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [flaggedQuestions, setFlaggedQuestions] = useState<number[]>([]);
-  const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
+  const [timeRemaining, setTimeRemaining] = useState(3600); // 1 hour in seconds
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [examScore, setExamScore] = useState(0);
   const navigate = useNavigate();
