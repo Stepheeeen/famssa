@@ -123,24 +123,30 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg p-4 absolute w-full left-0">
-          {links.map((item, index) => (
-            <a
-              key={index}
-              href={item.path}
-              className={`block py-2 transition text-lg ${
-                activeSection === item.path.substring(2)
-                  ? "text-[#FE9A2B]"
-                  : "text-gray-800"
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.page}
-            </a>
-          ))}
+          {links.map((item, index) => {
+            const isActive =
+              activeSection === item.path.substring(2) ||
+              location.pathname === item.path;
+            return (
+              <Link
+                key={index}
+                to={item.path}
+                className={`block py-2 transition text-lg ${
+                  isActive
+                    ? "text-[#FE9A2B]"
+                    : isScrolled
+                    ? "text-[#0B1D45]"
+                    : "text-white"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.page}
+              </Link>
+            );
+          })}
         </div>
       )}
     </nav>
   );
 };
-
 export default Navbar;
