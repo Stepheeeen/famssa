@@ -4,7 +4,7 @@ import { Button } from "../../../ui/button";
 import { Label } from "../../../ui/label";
 import { BASE_URL } from "../../../../constants";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
-import { FileInput, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dlyu92juc/upload";
 const CLOUDINARY_UPLOAD_PRESET = "famssa";
