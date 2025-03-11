@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,71 +12,41 @@ import { Badge } from "../../ui/badge";
 import { Clock, BookOpen, AlertCircle } from "lucide-react";
 import Navbar from "../../custom/Navbar";
 import { useNavigate } from "react-router-dom";
-
-const courses = [
-  {
-    id: 1,
-    name: "Mathematics",
-    code: "MTH101",
-    students: 42,
-    duration: "90 min",
-    difficulty: "Medium",
-    description:
-      "Introduction to calculus, algebra, and statistics with practical applications.",
-  },
-  {
-    id: 2,
-    name: "Physics",
-    code: "PHY102",
-    students: 38,
-    duration: "120 min",
-    difficulty: "Hard",
-    description:
-      "Study of mechanics, thermodynamics, and basic quantum physics.",
-  },
-  {
-    id: 3,
-    name: "Chemistry",
-    code: "CHM103",
-    students: 35,
-    duration: "90 min",
-    difficulty: "Medium",
-    description:
-      "Exploration of organic chemistry, chemical reactions, and laboratory techniques.",
-  },
-  {
-    id: 4,
-    name: "Biology",
-    code: "BIO104",
-    students: 48,
-    duration: "75 min",
-    difficulty: "Easy",
-    description:
-      "Overview of cell biology, genetics, and evolutionary principles.",
-  },
-  {
-    id: 5,
-    name: "Computer Science",
-    code: "CSC105",
-    students: 55,
-    duration: "120 min",
-    difficulty: "Hard",
-    description:
-      "Introduction to programming, algorithms, and computational thinking.",
-  },
-];
+import { BASE_URL } from "../../../constants";
 
 const CourseSelection = () => {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const navigate = useNavigate();
 
+  // Fetch courses from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/cbepdf/questions`); // Replace with your actual API URL
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+        const data = await response.json();
+        setCourses(data); // Ensure API returns an array of courses
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
   // Filter courses based on search term and difficulty
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
-      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.code.toLowerCase().includes(searchTerm.toLowerCase());
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.courseCode.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDifficulty =
       filterDifficulty === "All" || course.difficulty === filterDifficulty;
     return matchesSearch && matchesDifficulty;
@@ -109,15 +79,13 @@ const CourseSelection = () => {
 
         {/* Search and Filter */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              placeholder="Search by course name or code..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Search by course name or code..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <select
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             value={filterDifficulty}
@@ -130,57 +98,61 @@ const CourseSelection = () => {
           </select>
         </div>
 
+        {/* Loading/Error Handling */}
+        {loading && (
+          <p className="text-center text-gray-600">Loading courses...</p>
+        )}
+        {error && <p className="text-center text-red-500">Error: {error}</p>}
+
         {/* Course Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => (
-              <div
-                key={course.id}
-                className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer"
-                onClick={() => setSelectedCourse(course)}
-              >
-                <div className="p-5">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {course.name}
-                    </h3>
-                    <Badge variant="outline" className="text-xs">
-                      {course.code}
-                    </Badge>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {course.description}
-                  </p>
-                  <div className="flex justify-between flex-wrap gap-2 mt-2">
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Clock size={14} className="mr-1" />
-                      90 min
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map((course) => (
+                <div
+                  key={course._id}
+                  className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer"
+                  onClick={() => setSelectedCourse(course)}
+                >
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {course.title}
+                      </h3>
+                      <Badge variant="outline" className="text-xs">
+                        {course.courseCode}
+                      </Badge>
                     </div>
-                    <div className="flex items-center text-xs text-gray-500">
-                      {/* <Users size={14} className="mr-1" />
-                      {course.students} enrolled */}
-                    </div>
-                    <div
-                      className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(
-                        course.difficulty
-                      )}`}
-                    >
-                      {course.difficulty}
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {course.description}
+                    </p>
+                    <div className="flex justify-between flex-wrap gap-2 mt-2">
+                      <div className="flex items-center text-xs text-gray-500">
+                        <Clock size={14} className="mr-1" />
+                        90 min
+                      </div>
+                      <div
+                        className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(
+                          course.difficulty
+                        )}`}
+                      >
+                        {course.difficulty}
+                      </div>
                     </div>
                   </div>
+                  <div className="bg-gray-50 px-5 py-3 text-sm font-medium text-blue-600 hover:bg-gray-100">
+                    Take Exam →
+                  </div>
                 </div>
-                <div className="bg-gray-50 px-5 py-3 text-sm font-medium text-blue-600 hover:bg-gray-100">
-                  Take Exam →
-                </div>
+              ))
+            ) : (
+              <div className="col-span-3 flex flex-col items-center justify-center py-8 text-gray-500">
+                <AlertCircle size={48} className="mb-2 text-gray-400" />
+                <p>No courses match your search criteria</p>
               </div>
-            ))
-          ) : (
-            <div className="col-span-3 flex flex-col items-center justify-center py-8 text-gray-500">
-              <AlertCircle size={48} className="mb-2 text-gray-400" />
-              <p>No courses match your search criteria</p>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Exam Instructions Dialog */}
@@ -192,7 +164,7 @@ const CourseSelection = () => {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <BookOpen size={20} />
-              {selectedCourse?.name} ({selectedCourse?.code})
+              {selectedCourse?.title} ({selectedCourse?.courseCode})
             </DialogTitle>
             <DialogDescription>
               Please read the following exam instructions carefully.
@@ -200,27 +172,6 @@ const CourseSelection = () => {
           </DialogHeader>
 
           <div className="space-y-4">
-            <div className="flex gap-4 text-sm">
-              <div className="bg-blue-50 p-3 rounded-lg flex-1">
-                <p className="font-medium text-blue-700 mb-1">Duration</p>
-                <div className="flex items-center text-blue-600">
-                  <Clock size={16} className="mr-2" />
-                  {selectedCourse?.duration}
-                </div>
-              </div>
-              <div className="bg-purple-50 p-3 rounded-lg flex-1">
-                <p className="font-medium text-purple-700 mb-1">Difficulty</p>
-                <div
-                  className={`inline-block px-2 py-1 rounded-full text-xs ${
-                    selectedCourse &&
-                    getDifficultyColor(selectedCourse.difficulty)
-                  }`}
-                >
-                  {selectedCourse?.difficulty}
-                </div>
-              </div>
-            </div>
-
             <div className="bg-gray-50 p-4 rounded-lg">
               <h4 className="font-medium text-gray-900 mb-2">
                 Exam Guidelines
@@ -233,11 +184,6 @@ const CourseSelection = () => {
                 <li>Use of external resources is not permitted.</li>
               </ul>
             </div>
-
-            <div className="flex items-center p-3 bg-amber-50 text-amber-800 rounded-lg text-sm">
-              <AlertCircle size={18} className="mr-2 flex-shrink-0" />
-              You will not be able to pause once the exam starts.
-            </div>
           </div>
 
           <DialogFooter className="flex gap-2 sm:gap-0">
@@ -245,9 +191,9 @@ const CourseSelection = () => {
               Cancel
             </Button>
             <Button
-              onClick={() => {
-                navigate("/cbe/examination");
-              }}
+              onClick={() =>
+                navigate(`/cbe/examination?courseId=${selectedCourse?._id}`)
+              }
             >
               Start Exam
             </Button>
