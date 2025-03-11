@@ -10,18 +10,46 @@ import { Label } from "../../ui/label";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import { useState } from "react";
-import { COLORS } from "../../../constants";
+import { BASE_URL, COLORS } from "../../../constants";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any | null>(null);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log({ email, password });
-    // Handle authentication logic
-    navigate("/admin/dashboard");
+  const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
+
+    if (!email || !password) {
+      setError("Both fields are required.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) throw new Error("Invalid credentials");
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+
+      navigate("/admin/dashboard");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,6 +59,7 @@ export default function LoginCard() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -58,19 +87,20 @@ export default function LoginCard() {
               <Checkbox id="remember-me" />
               <Label htmlFor="remember-me">Remember me</Label>
             </div>
-            <a href="#" className="text-sm text-blue-600 underline">
+            {/* <a href="#" className="text-sm text-blue-600 underline">
               Forgot password?
-            </a>
+            </a> */}
           </div>
         </div>
       </CardContent>
       <CardFooter>
         <Button
-          className="w-full cursor-pointer text-white mt-4"
+          className={`w-full text-white mt-4 ${loading ? "bg-gray-400" : ""}`}
           onClick={handleLogin}
-          style={{ backgroundColor: COLORS.Yellow }}
+          style={{ backgroundColor: loading ? "#ccc" : COLORS.Yellow }}
+          disabled={loading}
         >
-          Sign In
+          {loading ? "Signing in..." : "Sign In"}
         </Button>
       </CardFooter>
     </Card>
