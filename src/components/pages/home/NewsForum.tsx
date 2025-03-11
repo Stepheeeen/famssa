@@ -1,32 +1,26 @@
-import { COLORS } from "../../../constants";
+import { useEffect, useState } from "react";
+import { BASE_URL, COLORS } from "../../../constants";
 import Title from "../../custom/Topography";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Link } from "react-router-dom";
 
-const newsData = [
-  {
-    id: 1,
-    title: "FAMSSA Launches New Initiative",
-    summary:
-      "FAMSSA introduces a new program to support students and enhance academic excellence.",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Upcoming General Meeting",
-    summary:
-      "Join us for the next general meeting to discuss future plans and events.",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "Scholarship Opportunities Available",
-    summary: "Check out the latest scholarships available for FAMSSA students.",
-    link: "#",
-  },
-];
-
 const NewsForum = () => {
+  const [newsData, setNewsData] = useState([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/news-forum/all`);
+        const data = await res.json();
+        setNewsData(data);
+      } catch (error) {
+        console.error("Error fetching news forum:", error);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   return (
     <section className="py-10 px-6 mt-10" id="news-forum">
       <div className="max-w-4xl mx-auto text-center">
@@ -37,8 +31,8 @@ const NewsForum = () => {
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
-        {newsData.map((news) => (
-          <Card key={news.id} className="hover:shadow-lg transition">
+        {newsData.map((news: any) => (
+          <Card key={news._id} className="hover:shadow-lg transition">
             <CardHeader>
               <CardTitle className="text-xl" style={{ color: COLORS.Yellow }}>
                 {news.title}
@@ -47,8 +41,8 @@ const NewsForum = () => {
             <CardContent>
               <p className="text-gray-600">{news.summary}</p>
               <Link
-                to={news.link}
-                className="hover:underline text-sm mt-2 inline-block "
+                to={news.link || "#"}
+                className="hover:underline text-sm mt-2 inline-block"
                 style={{ color: COLORS.Primary }}
               >
                 Read more →
