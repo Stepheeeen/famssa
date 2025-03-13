@@ -7,7 +7,7 @@ import { BASE_URL } from "../../../../constants";
 
 export const AdminNewsForum = () => {
   interface NewsItem {
-    _id: any;
+    _id?: string;
     title: string;
     summary: string;
     link: string;
@@ -52,11 +52,11 @@ export const AdminNewsForum = () => {
   const handleAdd = () => {
     setNewsList([
       ...newsList,
-      { _id: Date.now(), title: "", summary: "", link: "#" },
+      { title: "", summary: "", link: "#" }, // Remove _id for new items
     ]);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     const updated = newsList.filter((item) => item._id !== id);
     setNewsList(updated);
   };
@@ -65,16 +65,22 @@ export const AdminNewsForum = () => {
     setLoading(true);
 
     try {
+      const itemsToSave = newsList.map(({ _id, ...rest }) => ({
+        ...rest,
+        _id: _id || undefined, // Only include _id if it exists
+      }));
+
       const response = await fetch(`${BASE_URL}/news-forum/save`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newsList),
+        body: JSON.stringify(itemsToSave),
       });
 
       if (!response.ok) throw new Error("Failed to update news forum");
-
+      const savedData = await response.json();
+      setNewsList(savedData); // Update list with server-generated IDs
       alert("News Forum updated successfully!");
     } catch (error) {
       console.error("Error updating news forum:", error);
@@ -128,7 +134,7 @@ export const AdminNewsForum = () => {
           <Button
             variant="destructive"
             className="absolute top-4 right-4"
-            onClick={() => handleDelete(item._id)}
+            onClick={() => item._id && handleDelete(item._id)}
           >
             Delete
           </Button>
