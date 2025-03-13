@@ -136,7 +136,7 @@ const Navbar = () => {
                     ? "text-[#FE9A2B]"
                     : isScrolled
                     ? "text-[#0B1D45]"
-                    : "text-white"
+                    : "text-black"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
