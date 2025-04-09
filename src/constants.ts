@@ -3,4 +3,4 @@ export const COLORS = {
     Primary: '#0B1D45',
 };
 
-export const BASE_URL = "https://famssa-backend.onrender.com/v1"
+export const BASE_URL = "http://54.171.29.127:3300/v1"
