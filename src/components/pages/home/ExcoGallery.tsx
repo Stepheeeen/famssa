@@ -48,9 +48,6 @@ const ExcoGallery = () => {
               <p className="text-gray-600">
                 <strong>State:</strong> {member.state}
               </p>
-              <p className="text-gray-600">
-                <strong>LGA:</strong> {member.lga}
-              </p>
             </div>
           </div>
         ))}
